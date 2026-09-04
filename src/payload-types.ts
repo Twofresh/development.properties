@@ -171,17 +171,19 @@ export interface Media {
  */
 export interface Property {
   id: number;
+  /**
+   * Development name, e.g. Meadow Rise, Guildford
+   */
   title: string;
   /**
-   * Used in the property URL, e.g. 12-oak-avenue
+   * Used in the listing URL, e.g. meadow-rise-guildford
    */
   slug: string;
-  status: 'for-sale' | 'under-offer' | 'sold' | 'for-rent' | 'let';
-  price: number;
-  priceQualifier?: ('guide' | 'offers-over' | 'fixed' | 'pcm') | null;
-  propertyType: 'house' | 'flat' | 'bungalow' | 'land' | 'commercial';
-  bedrooms?: number | null;
-  bathrooms?: number | null;
+  serviceCategory: 'land-with-planning' | 'portfolio-investment' | 'land-promotion';
+  listingSource: 'developer-direct' | 'estate-agent';
+  planningStatus?: ('no-planning' | 'pre-application' | 'outline-permission' | 'full-permission') | null;
+  price?: number | null;
+  priceQualifier?: ('guide' | 'offers-over' | 'fixed' | 'poa') | null;
   addressLine1: string;
   addressLine2?: string | null;
   town: string;
@@ -208,12 +210,21 @@ export interface Property {
     };
     [k: string]: unknown;
   } | null;
-  features?:
-    | {
-        feature?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Number of units proposed
+   */
+  numberOfUnits?: number | null;
+  proposedSqFt?: number | null;
+  numberOfParkingSpaces?: number | null;
+  numberOfGardens?: number | null;
+  tenure?: ('freehold' | 'leasehold') | null;
+  financialContributions?: string | null;
+  vatApplicable?: boolean | null;
+  /**
+   * How the site is accessed
+   */
+  access?: string | null;
+  furtherInformation?: string | null;
   images?:
     | {
         image: number | Media;
@@ -221,6 +232,16 @@ export interface Property {
       }[]
     | null;
   floorplan?: (number | null) | Media;
+  /**
+   * Only visible to signed-in users on the public site
+   */
+  documents?:
+    | {
+        label: string;
+        file: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   agent?: (number | null) | Agent;
   featured?: boolean | null;
   updatedAt: string;
@@ -233,6 +254,10 @@ export interface Property {
 export interface Agent {
   id: number;
   name: string;
+  /**
+   * e.g. Land & New Homes
+   */
+  role?: string | null;
   email?: string | null;
   phone?: string | null;
   photo?: (number | null) | Media;
@@ -368,24 +393,26 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PropertiesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  status?: T;
+  serviceCategory?: T;
+  listingSource?: T;
+  planningStatus?: T;
   price?: T;
   priceQualifier?: T;
-  propertyType?: T;
-  bedrooms?: T;
-  bathrooms?: T;
   addressLine1?: T;
   addressLine2?: T;
   town?: T;
   postcode?: T;
   location?: T;
   description?: T;
-  features?:
-    | T
-    | {
-        feature?: T;
-        id?: T;
-      };
+  numberOfUnits?: T;
+  proposedSqFt?: T;
+  numberOfParkingSpaces?: T;
+  numberOfGardens?: T;
+  tenure?: T;
+  financialContributions?: T;
+  vatApplicable?: T;
+  access?: T;
+  furtherInformation?: T;
   images?:
     | T
     | {
@@ -393,6 +420,13 @@ export interface PropertiesSelect<T extends boolean = true> {
         id?: T;
       };
   floorplan?: T;
+  documents?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
   agent?: T;
   featured?: T;
   updatedAt?: T;
@@ -404,6 +438,7 @@ export interface PropertiesSelect<T extends boolean = true> {
  */
 export interface AgentsSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   email?: T;
   phone?: T;
   photo?: T;

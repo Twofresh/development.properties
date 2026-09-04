@@ -2,9 +2,11 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-vercel-postg
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_properties_status" AS ENUM('for-sale', 'under-offer', 'sold', 'for-rent', 'let');
-  CREATE TYPE "public"."enum_properties_price_qualifier" AS ENUM('guide', 'offers-over', 'fixed', 'pcm');
-  CREATE TYPE "public"."enum_properties_property_type" AS ENUM('house', 'flat', 'bungalow', 'land', 'commercial');
+   CREATE TYPE "public"."enum_properties_service_category" AS ENUM('land-with-planning', 'portfolio-investment', 'land-promotion');
+  CREATE TYPE "public"."enum_properties_listing_source" AS ENUM('developer-direct', 'estate-agent');
+  CREATE TYPE "public"."enum_properties_planning_status" AS ENUM('no-planning', 'pre-application', 'outline-permission', 'full-permission');
+  CREATE TYPE "public"."enum_properties_price_qualifier" AS ENUM('guide', 'offers-over', 'fixed', 'poa');
+  CREATE TYPE "public"."enum_properties_tenure" AS ENUM('freehold', 'leasehold');
   CREATE TABLE "users_sessions" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -42,13 +44,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"focal_y" numeric
   );
   
-  CREATE TABLE "properties_features" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"feature" varchar
-  );
-  
   CREATE TABLE "properties_images" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -56,22 +51,38 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"image_id" integer NOT NULL
   );
   
+  CREATE TABLE "properties_documents" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"label" varchar NOT NULL,
+  	"file_id" integer NOT NULL
+  );
+  
   CREATE TABLE "properties" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar NOT NULL,
   	"slug" varchar NOT NULL,
-  	"status" "enum_properties_status" DEFAULT 'for-sale' NOT NULL,
-  	"price" numeric NOT NULL,
-  	"price_qualifier" "enum_properties_price_qualifier",
-  	"property_type" "enum_properties_property_type" NOT NULL,
-  	"bedrooms" numeric,
-  	"bathrooms" numeric,
+  	"service_category" "enum_properties_service_category" NOT NULL,
+  	"listing_source" "enum_properties_listing_source" DEFAULT 'developer-direct' NOT NULL,
+  	"planning_status" "enum_properties_planning_status",
+  	"price" numeric,
+  	"price_qualifier" "enum_properties_price_qualifier" DEFAULT 'guide',
   	"address_line1" varchar NOT NULL,
   	"address_line2" varchar,
   	"town" varchar NOT NULL,
   	"postcode" varchar NOT NULL,
   	"location" geometry(Point),
   	"description" jsonb,
+  	"number_of_units" numeric,
+  	"proposed_sq_ft" numeric,
+  	"number_of_parking_spaces" numeric,
+  	"number_of_gardens" numeric,
+  	"tenure" "enum_properties_tenure",
+  	"financial_contributions" varchar,
+  	"vat_applicable" boolean DEFAULT false,
+  	"access" varchar,
+  	"further_information" varchar,
   	"floorplan_id" integer,
   	"agent_id" integer,
   	"featured" boolean DEFAULT false,
@@ -82,6 +93,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TABLE "agents" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"name" varchar NOT NULL,
+  	"role" varchar,
   	"email" varchar,
   	"phone" varchar,
   	"photo_id" integer,
@@ -138,9 +150,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   );
   
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "properties_features" ADD CONSTRAINT "properties_features_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."properties"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "properties_images" ADD CONSTRAINT "properties_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "properties_images" ADD CONSTRAINT "properties_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."properties"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "properties_documents" ADD CONSTRAINT "properties_documents_file_id_media_id_fk" FOREIGN KEY ("file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "properties_documents" ADD CONSTRAINT "properties_documents_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."properties"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "properties" ADD CONSTRAINT "properties_floorplan_id_media_id_fk" FOREIGN KEY ("floorplan_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "properties" ADD CONSTRAINT "properties_agent_id_agents_id_fk" FOREIGN KEY ("agent_id") REFERENCES "public"."agents"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "agents" ADD CONSTRAINT "agents_photo_id_media_id_fk" FOREIGN KEY ("photo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -159,11 +172,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "media_updated_at_idx" ON "media" USING btree ("updated_at");
   CREATE INDEX "media_created_at_idx" ON "media" USING btree ("created_at");
   CREATE UNIQUE INDEX "media_filename_idx" ON "media" USING btree ("filename");
-  CREATE INDEX "properties_features_order_idx" ON "properties_features" USING btree ("_order");
-  CREATE INDEX "properties_features_parent_id_idx" ON "properties_features" USING btree ("_parent_id");
   CREATE INDEX "properties_images_order_idx" ON "properties_images" USING btree ("_order");
   CREATE INDEX "properties_images_parent_id_idx" ON "properties_images" USING btree ("_parent_id");
   CREATE INDEX "properties_images_image_idx" ON "properties_images" USING btree ("image_id");
+  CREATE INDEX "properties_documents_order_idx" ON "properties_documents" USING btree ("_order");
+  CREATE INDEX "properties_documents_parent_id_idx" ON "properties_documents" USING btree ("_parent_id");
+  CREATE INDEX "properties_documents_file_idx" ON "properties_documents" USING btree ("file_id");
   CREATE UNIQUE INDEX "properties_slug_idx" ON "properties" USING btree ("slug");
   CREATE INDEX "properties_floorplan_idx" ON "properties" USING btree ("floorplan_id");
   CREATE INDEX "properties_agent_idx" ON "properties" USING btree ("agent_id");
@@ -199,8 +213,8 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
    DROP TABLE "users_sessions" CASCADE;
   DROP TABLE "users" CASCADE;
   DROP TABLE "media" CASCADE;
-  DROP TABLE "properties_features" CASCADE;
   DROP TABLE "properties_images" CASCADE;
+  DROP TABLE "properties_documents" CASCADE;
   DROP TABLE "properties" CASCADE;
   DROP TABLE "agents" CASCADE;
   DROP TABLE "payload_kv" CASCADE;
@@ -209,7 +223,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "payload_preferences" CASCADE;
   DROP TABLE "payload_preferences_rels" CASCADE;
   DROP TABLE "payload_migrations" CASCADE;
-  DROP TYPE "public"."enum_properties_status";
+  DROP TYPE "public"."enum_properties_service_category";
+  DROP TYPE "public"."enum_properties_listing_source";
+  DROP TYPE "public"."enum_properties_planning_status";
   DROP TYPE "public"."enum_properties_price_qualifier";
-  DROP TYPE "public"."enum_properties_property_type";`)
+  DROP TYPE "public"."enum_properties_tenure";`)
 }

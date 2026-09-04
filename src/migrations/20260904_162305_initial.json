@@ -351,88 +351,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.properties_features": {
-      "name": "properties_features",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "feature": {
-          "name": "feature",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "properties_features_order_idx": {
-          "name": "properties_features_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "properties_features_parent_id_idx": {
-          "name": "properties_features_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "properties_features_parent_id_fk": {
-          "name": "properties_features_parent_id_fk",
-          "tableFrom": "properties_features",
-          "tableTo": "properties",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.properties_images": {
       "name": "properties_images",
       "schema": "",
@@ -543,6 +461,122 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.properties_documents": {
+      "name": "properties_documents",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_id": {
+          "name": "file_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "properties_documents_order_idx": {
+          "name": "properties_documents_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "properties_documents_parent_id_idx": {
+          "name": "properties_documents_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "properties_documents_file_idx": {
+          "name": "properties_documents_file_idx",
+          "columns": [
+            {
+              "expression": "file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "properties_documents_file_id_media_id_fk": {
+          "name": "properties_documents_file_id_media_id_fk",
+          "tableFrom": "properties_documents",
+          "tableTo": "media",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "properties_documents_parent_id_fk": {
+          "name": "properties_documents_parent_id_fk",
+          "tableFrom": "properties_documents",
+          "tableTo": "properties",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.properties": {
       "name": "properties",
       "schema": "",
@@ -565,45 +599,41 @@
           "primaryKey": false,
           "notNull": true
         },
-        "status": {
-          "name": "status",
-          "type": "enum_properties_status",
+        "service_category": {
+          "name": "service_category",
+          "type": "enum_properties_service_category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "listing_source": {
+          "name": "listing_source",
+          "type": "enum_properties_listing_source",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'for-sale'"
+          "default": "'developer-direct'"
+        },
+        "planning_status": {
+          "name": "planning_status",
+          "type": "enum_properties_planning_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
         },
         "price": {
           "name": "price",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "price_qualifier": {
           "name": "price_qualifier",
           "type": "enum_properties_price_qualifier",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
-        },
-        "property_type": {
-          "name": "property_type",
-          "type": "enum_properties_property_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "bedrooms": {
-          "name": "bedrooms",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "bathrooms": {
-          "name": "bathrooms",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'guide'"
         },
         "address_line1": {
           "name": "address_line1",
@@ -638,6 +668,62 @@
         "description": {
           "name": "description",
           "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_of_units": {
+          "name": "number_of_units",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_sq_ft": {
+          "name": "proposed_sq_ft",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_of_parking_spaces": {
+          "name": "number_of_parking_spaces",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_of_gardens": {
+          "name": "number_of_gardens",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tenure": {
+          "name": "tenure",
+          "type": "enum_properties_tenure",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "financial_contributions": {
+          "name": "financial_contributions",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vat_applicable": {
+          "name": "vat_applicable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "access": {
+          "name": "access",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "further_information": {
+          "name": "further_information",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -801,6 +887,12 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "email": {
           "name": "email",
@@ -1568,15 +1660,31 @@
     }
   },
   "enums": {
-    "public.enum_properties_status": {
-      "name": "enum_properties_status",
+    "public.enum_properties_service_category": {
+      "name": "enum_properties_service_category",
       "schema": "public",
       "values": [
-        "for-sale",
-        "under-offer",
-        "sold",
-        "for-rent",
-        "let"
+        "land-with-planning",
+        "portfolio-investment",
+        "land-promotion"
+      ]
+    },
+    "public.enum_properties_listing_source": {
+      "name": "enum_properties_listing_source",
+      "schema": "public",
+      "values": [
+        "developer-direct",
+        "estate-agent"
+      ]
+    },
+    "public.enum_properties_planning_status": {
+      "name": "enum_properties_planning_status",
+      "schema": "public",
+      "values": [
+        "no-planning",
+        "pre-application",
+        "outline-permission",
+        "full-permission"
       ]
     },
     "public.enum_properties_price_qualifier": {
@@ -1586,18 +1694,15 @@
         "guide",
         "offers-over",
         "fixed",
-        "pcm"
+        "poa"
       ]
     },
-    "public.enum_properties_property_type": {
-      "name": "enum_properties_property_type",
+    "public.enum_properties_tenure": {
+      "name": "enum_properties_tenure",
       "schema": "public",
       "values": [
-        "house",
-        "flat",
-        "bungalow",
-        "land",
-        "commercial"
+        "freehold",
+        "leasehold"
       ]
     }
   },
@@ -1611,6 +1716,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "ef164e03-f4ee-422d-9efa-c16f0b7edc53",
+  "id": "dc7d76e0-d9a1-47c6-a616-304bd6f69b18",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

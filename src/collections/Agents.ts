@@ -15,6 +15,13 @@ export const Agents: CollectionConfig = {
       required: true,
     },
     {
+      name: 'role',
+      type: 'text',
+      admin: {
+        description: 'e.g. Land & New Homes',
+      },
+    },
+    {
       name: 'email',
       type: 'email',
     },
