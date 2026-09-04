@@ -1,15 +1,17 @@
 :root {
-  --bg: oklch(0.97 0.014 75);
-  --bg-alt: oklch(0.945 0.02 68);
-  --surface: oklch(0.995 0.006 80);
-  --text: oklch(0.27 0.02 50);
-  --text-muted: oklch(0.42 0.03 50);
-  --accent: oklch(0.64 0.15 45);
-  --accent-dark: oklch(0.53 0.14 42);
-  --accent-2: oklch(0.5 0.09 150);
-  --accent-2-bg: oklch(0.93 0.04 150);
-  --accent-bg: oklch(0.93 0.05 45);
-  --border: oklch(0.885 0.018 68);
+  /* Brand system: Paper/Stone (backgrounds), Ink/Bark (text), Field (consent
+     green — status only), Gold (money and rule-lines only, never a fill). */
+  --bg: #faf7f1;
+  --bg-alt: #f0ebe1;
+  --surface: #fffdfa;
+  --text: #241c14;
+  --text-muted: oklch(0.42 0.05 55);
+  --border: #e4dccc;
+  --gold: oklch(0.74 0.11 82);
+  --field: oklch(0.44 0.09 148);
+  --field-bg: oklch(0.93 0.03 148);
+  --accent: #241c14;
+  --accent-dark: #000000;
 }
 
 * {
@@ -23,9 +25,9 @@ body {
 
 body {
   margin: 0;
-  font-family: 'Work Sans', system-ui, sans-serif;
+  font-family: 'Instrument Sans', system-ui, sans-serif;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -34,8 +36,8 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Newsreader', Georgia, serif;
-  font-weight: 500;
+  font-family: 'Bodoni Moda', 'Bodoni 72', Didot, 'Times New Roman', serif;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -44,12 +46,12 @@ p {
 }
 
 a {
-  color: var(--accent-dark);
+  color: var(--text);
   text-decoration: none;
 }
 
 a:hover {
-  color: var(--accent);
+  color: var(--text-muted);
 }
 
 img {
@@ -66,14 +68,28 @@ button {
   font-family: inherit;
 }
 
+.label {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.data {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 14px 28px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   font-size: 15px;
   cursor: pointer;
   border: none;
@@ -82,7 +98,7 @@ button {
 
 .btn-primary {
   background: var(--accent);
-  color: oklch(0.99 0.006 80);
+  color: var(--bg);
 }
 
 .btn-primary:hover {
@@ -96,18 +112,34 @@ button {
 }
 
 .btn-outline:hover {
-  border-color: var(--accent);
-  color: var(--accent-dark);
+  border-color: var(--text);
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
   padding: 5px 12px;
-  border-radius: 100px;
-  font-size: 12.5px;
+  border-radius: 3px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--text);
+  color: var(--text);
+  background: transparent;
+}
+
+.tag-consent {
+  background: var(--field);
+  border-color: var(--field);
+  color: var(--bg);
+}
+
+.price {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
 }
 
 .card-fold {

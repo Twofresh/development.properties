@@ -15,27 +15,11 @@ export function Footer() {
       <div style={{ width: '100%', maxWidth: 1320, display: 'flex', flexDirection: 'column', gap: 40 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 40 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 280 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M3 11.5 12 4l9 7.5"
-                  stroke="var(--accent)"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M5.5 10v9a1 1 0 0 0 1 1H9v-5.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V20h2.5a1 1 0 0 0 1-1v-9"
-                  stroke="var(--accent)"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span style={{ fontFamily: "'Newsreader', serif", fontSize: 18, fontWeight: 600 }}>
-                Development Properties
-              </span>
-            </div>
+            <img
+              src="/logo/development-properties-primary.svg"
+              alt="development. properties"
+              style={{ height: 34, width: 'auto' }}
+            />
             <p style={{ fontSize: 13.5, color: 'var(--text-muted)', lineHeight: 1.6 }}>
               The marketplace for land, developments and planning-ready sites across the UK.
             </p>

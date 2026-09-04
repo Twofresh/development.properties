@@ -4,10 +4,10 @@ import type { Media, Property } from '@/payload-types'
 import { formatPrice, planningStatusLabels, serviceCategoryLabels } from '@/lib/format'
 
 const GRADIENTS = [
-  'linear-gradient(135deg, oklch(0.72 0.09 55), oklch(0.55 0.09 38))',
-  'linear-gradient(135deg, oklch(0.68 0.07 150), oklch(0.5 0.07 150))',
-  'linear-gradient(135deg, oklch(0.75 0.06 70), oklch(0.58 0.08 50))',
-  'linear-gradient(135deg, oklch(0.7 0.08 40), oklch(0.52 0.08 35))',
+  'linear-gradient(135deg, oklch(0.62 0.05 55), oklch(0.42 0.05 50))',
+  'linear-gradient(135deg, oklch(0.58 0.04 60), oklch(0.38 0.04 55))',
+  'linear-gradient(135deg, oklch(0.65 0.05 70), oklch(0.45 0.05 60))',
+  'linear-gradient(135deg, oklch(0.6 0.045 45), oklch(0.4 0.045 45))',
 ]
 
 function imageUrl(property: Property): string | undefined {
@@ -28,6 +28,7 @@ export function PropertyCard({
   const image = imageUrl(property)
   const gradient = GRADIENTS[property.id % GRADIENTS.length]
   const imageHeight = size === 'lg' ? 280 : size === 'md' ? 200 : 120
+  const isFullConsent = property.planningStatus === 'full-permission'
 
   return (
     <Link
@@ -44,14 +45,13 @@ export function PropertyCard({
       >
         {property.planningStatus && size !== 'sm' && (
           <span
-            className="tag"
+            className={isFullConsent ? 'tag tag-consent' : 'tag'}
             style={{
               position: 'absolute',
               top: 14,
               left: 14,
-              background: 'var(--accent-2-bg)',
-              color: 'var(--accent-2)',
-              fontSize: size === 'lg' ? 12.5 : 11.5,
+              background: isFullConsent ? undefined : 'var(--surface)',
+              fontSize: size === 'lg' ? 12 : 11,
             }}
           >
             {planningStatusLabels[property.planningStatus]}
@@ -61,11 +61,7 @@ export function PropertyCard({
       <div style={{ padding: size === 'sm' ? 16 : size === 'lg' ? 24 : 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
           <h3 style={{ fontSize: size === 'lg' ? 21 : size === 'sm' ? 16.5 : 18 }}>{property.title}</h3>
-          {size === 'lg' && (
-            <span style={{ fontSize: 19, fontWeight: 600, fontFamily: "'Newsreader', serif" }}>
-              {formatPrice(property)}
-            </span>
-          )}
+          {size === 'lg' && <span className="price" style={{ fontSize: 19 }}>{formatPrice(property)}</span>}
         </div>
         <p style={{ fontSize: size === 'sm' ? 13.5 : 14, color: 'var(--text-muted)' }}>
           {property.town}
@@ -80,14 +76,10 @@ export function PropertyCard({
               marginTop: 4,
             }}
           >
-            <span style={{ fontSize: size === 'sm' ? 14.5 : 15, fontWeight: 600, fontFamily: "'Newsreader', serif" }}>
+            <span className="price" style={{ fontSize: size === 'sm' ? 14.5 : 15 }}>
               {formatPrice(property)}
             </span>
-            {size === 'md' && (
-              <span className="tag" style={{ background: 'var(--accent-2-bg)', color: 'var(--accent-2)' }}>
-                {serviceCategoryLabels[property.serviceCategory]}
-              </span>
-            )}
+            {size === 'md' && <span className="tag">{serviceCategoryLabels[property.serviceCategory]}</span>}
           </div>
         )}
         {size === 'lg' && (
@@ -102,19 +94,16 @@ export function PropertyCard({
             }}
           >
             {property.numberOfUnits ? (
-              <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>
+              <span className="data" style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>
                 {property.numberOfUnits} units proposed
               </span>
             ) : null}
             {property.proposedSqFt ? (
-              <span style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>
+              <span className="data" style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>
                 {property.proposedSqFt.toLocaleString()} sq ft
               </span>
             ) : null}
-            <span
-              className="tag"
-              style={{ background: 'var(--accent-bg)', color: 'var(--accent-dark)', marginLeft: 'auto' }}
-            >
+            <span className="tag" style={{ marginLeft: 'auto' }}>
               {serviceCategoryLabels[property.serviceCategory]}
             </span>
           </div>

@@ -24,29 +24,12 @@ export function Header() {
           gap: 24,
         }}
       >
-        <Link
-          href="/"
-          style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text)' }}
-        >
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M3 11.5 12 4l9 7.5"
-              stroke="var(--accent)"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M5.5 10v9a1 1 0 0 0 1 1H9v-5.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V20h2.5a1 1 0 0 0 1-1v-9"
-              stroke="var(--accent)"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span style={{ fontFamily: "'Newsreader', serif", fontSize: 21, fontWeight: 600 }}>
-            Development Properties
-          </span>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            src="/logo/development-properties-primary.svg"
+            alt="development. properties"
+            style={{ height: 42, width: 'auto' }}
+          />
         </Link>
         <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
           <Link href="/about" style={{ fontSize: 14.5, fontWeight: 500, color: 'var(--text)' }}>

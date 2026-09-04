@@ -84,7 +84,7 @@ export default async function DevelopmentPage({
                   overflow: 'hidden',
                   background: heroUrl
                     ? `url(${heroUrl}) center / cover no-repeat`
-                    : 'linear-gradient(135deg, oklch(0.72 0.09 55), oklch(0.5 0.09 38))',
+                    : 'linear-gradient(135deg, oklch(0.62 0.05 55), oklch(0.42 0.05 50))',
                 }}
               />
               {galleryImages.length > 0 && (
@@ -99,7 +99,7 @@ export default async function DevelopmentPage({
                           borderRadius: 10,
                           background: media?.url
                             ? `url(${media.url}) center / cover no-repeat`
-                            : 'linear-gradient(135deg, oklch(0.68 0.07 150), oklch(0.5 0.07 150))',
+                            : 'linear-gradient(135deg, oklch(0.58 0.04 60), oklch(0.38 0.04 55))',
                         }}
                       />
                     )
@@ -119,11 +119,11 @@ export default async function DevelopmentPage({
               }}
             >
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <span className="tag" style={{ background: 'var(--accent-bg)', color: 'var(--accent-dark)' }}>
-                  {serviceCategoryLabels[property.serviceCategory]}
-                </span>
+                <span className="tag">{serviceCategoryLabels[property.serviceCategory]}</span>
                 {property.planningStatus && (
-                  <span className="tag" style={{ background: 'var(--accent-2-bg)', color: 'var(--accent-2)' }}>
+                  <span
+                    className={property.planningStatus === 'full-permission' ? 'tag tag-consent' : 'tag'}
+                  >
                     {planningStatusLabels[property.planningStatus]}
                   </span>
                 )}
@@ -173,7 +173,7 @@ export default async function DevelopmentPage({
                         className="btn"
                         style={{
                           background: 'var(--text)',
-                          color: 'white',
+                          color: 'var(--bg)',
                           width: 'auto',
                           alignSelf: 'flex-start',
                           padding: '10px 20px',
@@ -217,14 +217,15 @@ export default async function DevelopmentPage({
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <span
                   className="tag"
-                  style={{
-                    background: property.listingSource === 'developer-direct' ? 'var(--accent)' : 'var(--text)',
-                    color: 'white',
-                  }}
+                  style={
+                    property.listingSource === 'developer-direct'
+                      ? { background: 'var(--text)', color: 'var(--bg)' }
+                      : undefined
+                  }
                 >
                   {property.listingSource === 'developer-direct' ? 'Developer direct' : 'Estate agent'}
                 </span>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Ref. DP-{property.id}</span>
+                <span className="data" style={{ fontSize: 12, color: 'var(--text-muted)' }}>Ref. DP-{property.id}</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span
@@ -238,7 +239,7 @@ export default async function DevelopmentPage({
                 >
                   Guide price
                 </span>
-                <span style={{ fontFamily: "'Newsreader', serif", fontSize: 32 }}>
+                <span className="price" style={{ fontSize: 32 }}>
                   {formatPrice(property)}
                 </span>
               </div>
@@ -248,13 +249,13 @@ export default async function DevelopmentPage({
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 10, paddingTop: 4 }}>
                 {property.numberOfUnits ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: 14, background: 'var(--bg-alt)', borderRadius: 10 }}>
-                    <span style={{ fontFamily: "'Newsreader', serif", fontSize: 21 }}>{property.numberOfUnits}</span>
+                    <span className="data" style={{ fontSize: 21 }}>{property.numberOfUnits}</span>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Units proposed</span>
                   </div>
                 ) : null}
                 {property.proposedSqFt ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: 14, background: 'var(--bg-alt)', borderRadius: 10 }}>
-                    <span style={{ fontFamily: "'Newsreader', serif", fontSize: 21 }}>
+                    <span className="data" style={{ fontSize: 21 }}>
                       {property.proposedSqFt.toLocaleString()}
                     </span>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Proposed sq ft</span>
@@ -262,7 +263,7 @@ export default async function DevelopmentPage({
                 ) : null}
                 {property.numberOfParkingSpaces ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: 14, background: 'var(--bg-alt)', borderRadius: 10 }}>
-                    <span style={{ fontFamily: "'Newsreader', serif", fontSize: 21 }}>
+                    <span className="data" style={{ fontSize: 21 }}>
                       {property.numberOfParkingSpaces}
                     </span>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Parking spaces</span>
@@ -270,7 +271,7 @@ export default async function DevelopmentPage({
                 ) : null}
                 {property.numberOfGardens ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: 14, background: 'var(--bg-alt)', borderRadius: 10 }}>
-                    <span style={{ fontFamily: "'Newsreader', serif", fontSize: 21 }}>
+                    <span className="data" style={{ fontSize: 21 }}>
                       {property.numberOfGardens}
                     </span>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Gardens</span>

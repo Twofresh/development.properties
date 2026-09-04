@@ -10,22 +10,16 @@ const SERVICES = [
     title: 'Land & buildings with planning',
     description:
       'List sites and buildings that already have planning permission secured, ready for the next developer to take forward.',
-    iconBg: 'var(--accent-bg)',
-    iconColor: 'var(--accent-dark)',
   },
   {
     title: 'Portfolios & investments',
     description:
       'Sell a block of flats or a wider property portfolio to serious investors and developers, in one clean listing.',
-    iconBg: 'var(--accent-2-bg)',
-    iconColor: 'var(--accent-2)',
   },
   {
     title: 'Planning & land promotion',
     description:
       'Get support taking raw land through the planning process, to unlock and prove its development value.',
-    iconBg: 'var(--accent-bg)',
-    iconColor: 'var(--accent-dark)',
   },
 ]
 
@@ -60,15 +54,14 @@ export default async function HomePage() {
           style={{
             position: 'absolute',
             inset: 0,
-            background:
-              'linear-gradient(160deg, oklch(0.58 0.1 55) 0%, oklch(0.4 0.08 40) 55%, oklch(0.28 0.05 35) 100%)',
+            background: 'linear-gradient(160deg, #3a2e20 0%, #241c14 55%, #14100a 100%)',
           }}
         >
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(0deg, oklch(0.2 0.03 40) 0%, transparent 45%)',
+              background: 'linear-gradient(0deg, #14100a 0%, transparent 45%)',
             }}
           />
         </div>
@@ -96,7 +89,7 @@ export default async function HomePage() {
           >
             Find land, developments &amp; planning-ready sites
           </h1>
-          <p style={{ color: 'oklch(0.95 0.01 70)', fontSize: 17.5, maxWidth: 560, lineHeight: 1.5 }}>
+          <p style={{ color: '#e4dccc', fontSize: 17.5, maxWidth: 560, lineHeight: 1.5 }}>
             The marketplace connecting agents and developers with genuine opportunities — land,
             buildings and portfolios, ready to move forward.
           </p>
@@ -211,7 +204,7 @@ export default async function HomePage() {
       >
         <div style={{ width: '100%', maxWidth: 1320, display: 'flex', flexWrap: 'wrap', gap: 40 }}>
           <div style={{ flex: '1 1 420px', display: 'flex', flexDirection: 'column', gap: 22 }}>
-            <span className="tag" style={{ background: 'var(--accent-bg)', color: 'var(--accent-dark)', alignSelf: 'flex-start' }}>
+            <span className="tag" style={{ alignSelf: 'flex-start' }}>
               What we do
             </span>
             <h2 style={{ fontSize: 34, lineHeight: 1.2, maxWidth: 520 }}>
@@ -222,7 +215,7 @@ export default async function HomePage() {
               have planning permission secured — so you can move from opportunity to delivery
               faster. List your first development free while we&apos;re in beta.
             </p>
-            <Link href="/developments" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 8, color: 'white' }}>
+            <Link href="/developments" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 8 }}>
               Browse Land &amp; Developments
             </Link>
           </div>
@@ -254,14 +247,14 @@ export default async function HomePage() {
                   style={{
                     width: 46,
                     height: 46,
-                    borderRadius: 10,
-                    background: service.iconBg,
+                    borderRadius: 4,
+                    border: '1.5px solid var(--text)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: service.iconColor,
-                    fontSize: 18,
-                    fontWeight: 600,
+                    color: 'var(--text)',
+                    fontFamily: "'Bodoni Moda', serif",
+                    fontSize: 20,
                   }}
                 >
                   {service.title.charAt(0)}
@@ -309,22 +302,23 @@ export default async function HomePage() {
         <div style={{ width: '100%', maxWidth: 1320, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 22 }}>
           <div
             style={{
-              background: 'linear-gradient(135deg, oklch(0.6 0.1 45), oklch(0.46 0.09 42))',
-              borderRadius: 16,
+              background: '#241c14',
+              borderRadius: 4,
               padding: 40,
               display: 'flex',
               flexDirection: 'column',
               gap: 16,
             }}
           >
-            <h3 style={{ color: 'white', fontSize: 24 }}>Have land or a development to sell?</h3>
-            <p style={{ color: 'oklch(0.95 0.02 45)', fontSize: 14.5, lineHeight: 1.6, maxWidth: 400 }}>
+            <h3 style={{ color: 'var(--bg)', fontSize: 24 }}>Have land or a development to sell?</h3>
+            <div style={{ width: 48, height: 1.5, background: 'var(--gold)' }} />
+            <p style={{ color: '#e4dccc', fontSize: 14.5, lineHeight: 1.6, maxWidth: 400 }}>
               List your first development for free — no listing fees while we&apos;re in beta.
             </p>
             <Link
               href="/list-a-development"
               className="btn"
-              style={{ background: 'white', color: 'var(--accent-dark)', alignSelf: 'flex-start', marginTop: 8 }}
+              style={{ background: 'var(--bg)', color: 'var(--text)', alignSelf: 'flex-start', marginTop: 8 }}
             >
               List a Development
             </Link>
