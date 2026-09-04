@@ -101,24 +101,26 @@ export default async function HomePage() {
             buildings and portfolios, ready to move forward.
           </p>
         </div>
-        <form
-          action="/developments"
-          style={{
-            position: 'absolute',
-            bottom: -34,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 'min(1160px, calc(100% - 48px))',
-            background: 'var(--surface)',
-            borderRadius: 14,
-            boxShadow: '0 18px 40px -12px oklch(0.3 0.05 40 / 0.35)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'stretch',
-            padding: 10,
-            gap: 8,
-          }}
-        >
+      </section>
+
+      {/* SEARCH BAR — same 1320 max-width container as the hero content above, so it always
+          lines up with it regardless of viewport width */}
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
+        <div style={{ width: '100%', maxWidth: 1320, padding: '0 24px', marginTop: -34 }}>
+          <form
+            action="/developments"
+            style={{
+              width: '100%',
+              background: 'var(--surface)',
+              borderRadius: 14,
+              boxShadow: '0 18px 40px -12px oklch(0.3 0.05 40 / 0.35)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'stretch',
+              padding: 10,
+              gap: 8,
+            }}
+          >
           <div
             style={{
               flex: '2 1 220px',
@@ -193,8 +195,9 @@ export default async function HomePage() {
             </svg>
             Search
           </button>
-        </form>
-      </section>
+          </form>
+        </div>
+      </div>
 
       {/* BLURB */}
       <section
